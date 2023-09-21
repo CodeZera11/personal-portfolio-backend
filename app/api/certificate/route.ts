@@ -6,7 +6,6 @@ export async function POST(req: NextRequest) {
     const data = await req.json();
 
     const { title, image, link } = data;
-    console.log("Problem 1", data);
 
     if (!title || !image || !link) {
       return NextResponse.json(
@@ -15,8 +14,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.log("Problem 2");
-
     const response = await prisma.certificate.create({
       data: {
         title,
@@ -24,8 +21,6 @@ export async function POST(req: NextRequest) {
         link,
       },
     });
-
-    console.log("Problem 3");
 
     return NextResponse.json({ response }, { status: 200 });
   } catch (error) {

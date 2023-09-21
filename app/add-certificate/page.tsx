@@ -27,18 +27,46 @@ const AddCertificatePage = () => {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         try {
-            if (!title || !image) {
+            if (!title || !image || !link) {
                 return;
             }
 
+
+            setLoading(true);
+
+            const form = e.currentTarget;
+            console.log(form)
+
+            // @ts-ignore
+            const fileInput = Array.from(form.elements).find(({ name }) => name === 'image');
+
+            const formData = new FormData();
+
+            //@ts-ignore
+            for (const file of fileInput.files) {
+                formData.append('file', file);
+            }
+
+            formData.append('upload_preset', 'my_uploads');
+
+            await fetch('https://api.cloudinary.com/v1_1/db6t06fzk/image/upload', {
+                method: 'POST',
+                body: formData
+            }).then(r => r.json());
+
+            const coudinary_data = await axios.post("https://api.cloudinary.com/v1_1/db6t06fzk/image/upload", formData)
+
+            const secure_image_url = coudinary_data?.data.secure_url
+
             const data = {
                 title,
-                image,
-                link
+                link,
+                image: secure_image_url
             }
-            setLoading(true);
+
             const response = await axios.post("/api/certificate", data)
             if (response.status === 200) {
+                setImage(response.data.image);
                 toast.success("Certificate Added Successfully")
             }
         } catch (error: any) {
@@ -52,20 +80,20 @@ const AddCertificatePage = () => {
     return (
         <div className="bg-black max-w-2xl mx-auto mt-10 flex flex-col gap-5">
             <h1 className="text-white text-5xl font-bold text-center">Add Certificate</h1>
-            <form className="flex flex-col gap-5">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                 <div className="flex flex-col gap-5">
                     <label className="text-2xl font-bold" htmlFor="title">Title</label>
-                    <input id="title" type="text" placeholder="Enter Certificate Title" value={title} onChange={e => setTitle(e.target.value)} className="text-black p-4 rounded-xl text-xl" required />
+                    <input disabled={loading} id="title" type="text" placeholder="Enter Certificate Title" value={title} onChange={e => setTitle(e.target.value)} className="text-black p-4 rounded-xl text-xl" required />
                 </div>
                 <div className="flex flex-col gap-5">
                     <label className="text-2xl font-bold" htmlFor="image">Image</label>
-                    <input id="image" className="border border-white rounded-xl p-5" type="file" onChange={handleFileChange} />
+                    <input disabled={loading} name="image" className="border border-white rounded-xl p-5" type="file" onChange={handleFileChange} />
                 </div>
                 <div className="flex flex-col gap-5">
                     <label className="text-2xl font-bold" htmlFor="link">Link</label>
-                    <input id="link" type="text" placeholder="Enter Certificate Link" value={link} onChange={e => setLink(e.target.value)} className="text-black p-4 rounded-xl text-xl" required />
+                    <input disabled={loading} id="link" type="text" placeholder="Enter Certificate Link" value={link} onChange={e => setLink(e.target.value)} className="text-black p-4 rounded-xl text-xl" required />
                 </div>
-                <button disabled={loading} className="border-white border hover:bg-white transition-colors duration-700 hover:text-black bg-black text-white font-bold px-4 py-2 rounded-xl" type="submit" onClick={handleSubmit}>{loading ? "Loading..." : "Add Skill"}</button>
+                <button disabled={loading} className="border-white border hover:bg-white transition-colors duration-700 hover:text-black bg-black text-white font-bold px-4 py-2 rounded-xl" type="submit">{loading ? "Loading..." : "Add Skill"}</button>
             </form>
         </div>
     )

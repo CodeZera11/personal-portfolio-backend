@@ -4,7 +4,7 @@ import { ChangeEvent, useState } from "react";
 import axios from "axios"
 import toast from "react-hot-toast";
 
-const AddSkillPage = () => {
+const AddProjectPage = () => {
 
     const [title, setTitle] = useState<string>("");
     const [icon, setIcon] = useState<any>();
@@ -36,7 +36,7 @@ const AddSkillPage = () => {
             }
             setLoading(true);
             await axios.post("/api/skill", data)
-            toast.success("Skill Added Successfully")
+            toast.success("Skill Created Successfully")
         } catch (error: any) {
             toast.error(error.message)
             console.log(error)
@@ -47,7 +47,7 @@ const AddSkillPage = () => {
 
     return (
         <div className="bg-black max-w-2xl mx-auto mt-10 flex flex-col gap-5">
-            <h1 className="text-white text-5xl font-bold text-center">Add Skill</h1>
+            <h1 className="text-white text-5xl font-bold text-center">Add Project</h1>
             <form className="flex flex-col gap-5">
                 <div className="flex flex-col gap-5">
                     <label className="text-2xl font-bold" htmlFor="title">Title</label>
@@ -57,10 +57,10 @@ const AddSkillPage = () => {
                     <label className="text-2xl font-bold" htmlFor="icon">Icon</label>
                     <input accept=".png" className="border border-white rounded-xl p-5" type="file" onChange={handleFileChange} />
                 </div>
-                <button disabled={loading} className="border-white border hover:bg-white transition-colors duration-700 hover:text-black bg-black text-white font-bold px-4 py-2 rounded-xl" type="submit" onClick={handleSubmit}>{loading ? "Loading..." : "Add Certificate"}</button>
+                <button disabled={loading} className="border-white border hover:bg-white transition-colors duration-700 hover:text-black bg-black text-white font-bold px-4 py-2 rounded-xl" type="submit" onClick={handleSubmit}>{loading ? "Loading..." : "Add Skill"}</button>
             </form>
         </div>
     )
 }
 
-export default AddSkillPage;
+export default AddProjectPage;

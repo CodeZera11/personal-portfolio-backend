@@ -66,7 +66,9 @@ const AddCertificatePage = () => {
 
             const response = await axios.post("/api/certificate", data)
             if (response.status === 200) {
-                setImage(response.data.image);
+                setImage(null);
+                setLink("");
+                setTitle("");
                 toast.success("Certificate Added Successfully")
             }
         } catch (error: any) {
@@ -93,7 +95,7 @@ const AddCertificatePage = () => {
                     <label className="text-2xl font-bold" htmlFor="link">Link</label>
                     <input disabled={loading} id="link" type="text" placeholder="Enter Certificate Link" value={link} onChange={e => setLink(e.target.value)} className="text-black p-4 rounded-xl text-xl" required />
                 </div>
-                <button disabled={loading} className="border-white border hover:bg-white transition-colors duration-700 hover:text-black bg-black text-white font-bold px-4 py-2 rounded-xl" type="submit">{loading ? "Loading..." : "Add Skill"}</button>
+                <button disabled={loading} className="border-white border hover:bg-white transition-colors duration-700 hover:text-black bg-black text-white font-bold px-4 py-2 rounded-xl" type="submit">{loading ? "Loading..." : "Add Certificate"}</button>
             </form>
         </div>
     )

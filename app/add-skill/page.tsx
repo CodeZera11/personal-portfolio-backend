@@ -60,7 +60,8 @@ const AddSkillPage = () => {
             const response = await axios.post("/api/skill", input_data)
             if (response.status === 200) {
                 toast.success("Skill Added Successfully")
-                setIcon(response.data.icon);
+                setTitle("")
+                setIcon(null);
             }
         } catch (error: any) {
             toast.error(error.message)
@@ -76,13 +77,13 @@ const AddSkillPage = () => {
             <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-5">
                     <label className="text-2xl font-bold" htmlFor="title">Title</label>
-                    <input type="text" placeholder="Enter Skill Title" value={title} onChange={e => setTitle(e.target.value)} className="text-black p-4 rounded-xl text-xl" required />
+                    <input disabled={loading} type="text" placeholder="Enter Skill Title" value={title} onChange={e => setTitle(e.target.value)} className="text-black p-4 rounded-xl text-xl" required />
                 </div>
                 <div className="flex flex-col gap-5">
                     <label className="text-2xl font-bold" htmlFor="icon">Icon</label>
-                    <input name="icon" accept=".png" className="border border-white rounded-xl p-5" type="file" onChange={handleFileChange} />
+                    <input disabled={loading} name="icon" accept=".png" className="border border-white rounded-xl p-5" type="file" onChange={handleFileChange} />
                 </div>
-                <button disabled={loading} className="border-white border hover:bg-white transition-colors duration-700 hover:text-black bg-black text-white font-bold px-4 py-2 rounded-xl" type="submit">{loading ? "Loading..." : "Add Certificate"}</button>
+                <button disabled={loading} className="border-white border hover:bg-white transition-colors duration-700 hover:text-black bg-black text-white font-bold px-4 py-2 rounded-xl" type="submit">{loading ? "Loading..." : "Add Skill"}</button>
             </form>
         </div>
     )
